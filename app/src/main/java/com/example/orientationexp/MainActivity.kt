@@ -7,6 +7,8 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.GoTrue
@@ -31,8 +33,14 @@ class MainActivity : AppCompatActivity() {
             val client = getclient()
             val supabaseResponse = client.postgrest["user"].select()
             val data = supabaseResponse.decodeList<User>()
-            val dataDisplay = findViewById<TextView>(R.id.dataDisplay)
-            dataDisplay.text = data.toString()
+            //val dataDisplay = findViewById<TextView>(R.id.dataDisplay)
+            //dataDisplay.text = data.toString()
+            val adapter = YourAdapter(data)
+            val dataDisplayRecycler = findViewById<RecyclerView>(R.id.dataDisplayRecycler)
+            dataDisplayRecycler.adapter = adapter
+            dataDisplayRecycler.layoutManager = LinearLayoutManager(this@MainActivity)
+            //val dataDisplayRecycler = findViewById<RecyclerView>(R.id.dataDisplayRecycler)
+            //dataDisplayRecycler.adapter = YourAdapter(data)
             //Log.e("supabase", data.toString())
         }
     }
@@ -49,8 +57,8 @@ class MainActivity : AppCompatActivity() {
 
 @Serializable
 data class User(
-    val id: Int = 0,
-    val first_name: String = "",
-    val last_name: String = "",
-    val email: String = ""
+    val id: Int,
+    val first_name: String,
+    val last_name: String,
+    val email: String
 )

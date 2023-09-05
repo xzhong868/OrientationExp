@@ -47,6 +47,7 @@ dependencies {
     implementation("io.github.jan-tennert.supabase:postgrest-kt:0.7.6")
     implementation("io.ktor:ktor-client-cio:2.3.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }

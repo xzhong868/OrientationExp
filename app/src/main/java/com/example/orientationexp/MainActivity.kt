@@ -1,5 +1,6 @@
 package com.example.orientationexp
 
+import android.content.Intent
 import android.net.http.HttpResponseCache.install
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +15,8 @@ import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.GoTrue
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.query.FilterOperator
+import io.github.jan.supabase.postgrest.query.Order
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
@@ -26,15 +29,24 @@ class MainActivity : AppCompatActivity() {
         refreshbutton.setOnClickListener {
             getData()
         }
+
+        val nextButton = findViewById<Button>(R.id.nextButton)
+        nextButton.setOnClickListener {
+            val intent = Intent(this, NewActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun getData() {
         lifecycleScope.launch{
             val client = getclient()
-            val supabaseResponse = client.postgrest["user"].select()
+            val supabaseResponse = client.postgrest["user"].select() {
+                order("id", Order.DESCENDING)
+                //eq("id", 1)
+            }
             val data = supabaseResponse.decodeList<User>()
-            //val dataDisplay = findViewById<TextView>(R.id.dataDisplay)
-            //dataDisplay.text = data.toString()
+            val dataDisplay = findViewById<TextView>(R.id.dataDisplay)
+            dataDisplay.text = data.toString()
             val adapter = YourAdapter(data)
             val dataDisplayRecycler = findViewById<RecyclerView>(R.id.dataDisplayRecycler)
             dataDisplayRecycler.adapter = adapter
